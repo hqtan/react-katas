@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-const Widget = () => {
-  return <Counter /> ;
-};
+const Widget = () => <Counter />;
 
 const Counter = () => {
   const [count, setCount] = useState(0);
@@ -14,11 +12,11 @@ const Counter = () => {
 
   return (
     <>
-      <button onClick = { () => add(1) }>Add</button>
-      <button onClick = { () => add(-1) }>Minus</button>
+      <button type="button" onClick={() => add(1)}>Add</button>
+      <button type="button" onClick={() => add(-1)}>Minus</button>
       <p>{ count }</p>
     </>
-  )
-}
+  );
+};
 
 export default Widget;
