@@ -2,13 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-import Widget from './widget';
+// import Widget from './widget';
+import Square from './ticTacToe';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
-    <Widget />
+    {/* <Widget /> */}
+    <Square />
   </React.StrictMode>,
   document.getElementById('root'),
 );
