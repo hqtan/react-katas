@@ -27,4 +27,27 @@ const Square = () => {
   );
 };
 
-export default Square;
+const Board = () => (
+  <>
+    {/* top */}
+    <div className="row">
+      <Square />
+      <Square />
+      <Square />
+    </div>
+    {/* middle */}
+    <div className="row">
+      <Square />
+      <Square />
+      <Square />
+    </div>
+    {/* bottom */}
+    <div className="row">
+      <Square />
+      <Square />
+      <Square />
+    </div>
+  </>
+);
+
+export default Board;
