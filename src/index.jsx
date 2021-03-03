@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 // import Widget from './widget';
-import Square from './ticTacToe';
+import Board from './ticTacToe';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
     {/* <Widget /> */}
-    <Square />
+    <Board />
   </React.StrictMode>,
   document.getElementById('root'),
 );

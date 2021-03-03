@@ -4,4 +4,11 @@ div.square {
   height: 100px;
   font-size: 5em;
   text-align: center;
+  border: 1px solid black;
+}
+
+div.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
