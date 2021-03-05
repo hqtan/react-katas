@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import './ticTacToe.css';
 
 const Square = (coords) => {
-  const [xo, setXo] = useState('');
+  const [xo, setXo] = useState({ mark: '', filled: false });
 
   const handleClick = () => {
-    console.log(`clicked square on row:${coords.row}, col:${coords.col}`);
-    setXo('X');
+    console.log(`clicked square on row:${coords.row}, col:${coords.col}, 
+      previous state: mark: ${xo.mark}, filled:${xo.filled}`);
+    setXo({ mark: 'X', filled: true });
   };
 
   const handleKeyDown = () => {
-    console.log(`key pressed on row:${coords.row}, col:${coords.col}`);
-    setXo('X');
+    console.log(`key pressed on row:${coords.row}, col:${coords.col}, 
+      previous state: mark: ${xo.mark}, filled:${xo.filled}`);
+    setXo({ mark: 'X', filled: true });
   };
 
   return (
@@ -22,7 +24,7 @@ const Square = (coords) => {
       role="button"
       tabIndex="0"
     >
-      { xo }
+      { xo.mark }
     </div>
   );
 };
