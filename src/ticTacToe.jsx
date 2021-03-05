@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import './ticTacToe.css';
 
-const Square = () => {
+const Square = (coords) => {
   const [xo, setXo] = useState('');
 
   const handleClick = () => {
-    console.log('clicked square');
+    console.log(`clicked square on row:${coords.row}, col:${coords.col}`);
     setXo('X');
   };
 
   const handleKeyDown = () => {
-    console.log('key pressed');
+    console.log(`key pressed on row:${coords.row}, col:${coords.col}`);
     setXo('X');
   };
 
@@ -31,21 +31,21 @@ const Board = () => (
   <>
     {/* top */}
     <div className="row">
-      <Square />
-      <Square />
-      <Square />
+      <Square row="0" col="0" />
+      <Square row="0" col="1" />
+      <Square row="0" col="2" />
     </div>
     {/* middle */}
     <div className="row">
-      <Square />
-      <Square />
-      <Square />
+      <Square row="1" col="0" />
+      <Square row="1" col="1" />
+      <Square row="1" col="2" />
     </div>
     {/* bottom */}
     <div className="row">
-      <Square />
-      <Square />
-      <Square />
+      <Square row="2" col="0" />
+      <Square row="2" col="1" />
+      <Square row="2" col="2" />
     </div>
   </>
 );
