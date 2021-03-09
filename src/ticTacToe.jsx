@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
 import './ticTacToe.css';
 
-function updatePlayerState(row, col, pState, setPState) {
+function updatePlayerState(row, col, player) {
   const plyrState = {
-    ownedRows: pState.ownedRows,
-    ownedCols: pState.ownedCols,
+    ownedRows: player.state.ownedRows,
+    ownedCols: player.state.ownedCols,
   };
   plyrState.ownedRows[row] = true;
   plyrState.ownedCols[col] = true;
   console.log(`player state:
     ownedRows: ${plyrState.ownedRows}, ownedCols: ${plyrState.ownedCols}`);
-  setPState(plyrState);
+  player.useStateFn(plyrState);
 }
 
-const Square = (coords) => {
+const Square = (ps) => {
   const [xo, setXo] = useState({ mark: '', filled: false });
 
   const handleClick = () => {
-    console.log(`clicked square on row:${coords.row}, col:${coords.col}, 
+    console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
       previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    updatePlayerState(coords.row, coords.col, coords.plyrState, coords.updatePlyr);
-    setXo({ mark: 'X', filled: true });
+    updatePlayerState(ps.row, ps.col, ps.player);
+    setXo({ mark: ps.player.mark, filled: true });
   };
 
   const handleKeyDown = () => {
-    console.log(`key pressed on row:${coords.row}, col:${coords.col}, 
+    console.log(`key pressed on row:${ps.row}, col:${ps.col}, 
       previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    updatePlayerState(coords.row, coords.col, coords.plyrState, coords.updatePlyr);
-    setXo({ mark: 'X', filled: true });
+    updatePlayerState(ps.row, ps.col, ps.player);
+    setXo({ mark: ps.player.mark, filled: true });
   };
 
   return (
@@ -43,31 +43,41 @@ const Square = (coords) => {
   );
 };
 
+class Player {
+  constructor(mark, state, useStateFn) {
+    this.mark = mark;
+    this.state = state;
+    this.useStateFn = useStateFn;
+  }
+}
+
 const TicTacToe = () => {
   const [plyr, setPlyr] = useState({
     ownedRows: Array(3).fill(false),
     ownedCols: Array(3).fill(false),
   });
 
+  const p1 = new Player('X', plyr, setPlyr);
+
   return (
     <>
       {/* top */}
       <div className="row">
-        <Square row="0" col="0" updatePlyr={setPlyr} plyrState={plyr} />
-        <Square row="0" col="1" updatePlyr={setPlyr} plyrState={plyr} />
-        <Square row="0" col="2" updatePlyr={setPlyr} plyrState={plyr} />
+        <Square row="0" col="0" player={p1} />
+        <Square row="0" col="1" player={p1} />
+        <Square row="0" col="2" player={p1} />
       </div>
       {/* middle */}
       <div className="row">
-        <Square row="1" col="0" updatePlyr={setPlyr} plyrState={plyr} />
-        <Square row="1" col="1" updatePlyr={setPlyr} plyrState={plyr} />
-        <Square row="1" col="2" updatePlyr={setPlyr} plyrState={plyr} />
+        <Square row="1" col="0" player={p1} />
+        <Square row="1" col="1" player={p1} />
+        <Square row="1" col="2" player={p1} />
       </div>
       {/* bottom */}
       <div className="row">
-        <Square row="2" col="0" updatePlyr={setPlyr} plyrState={plyr} />
-        <Square row="2" col="1" updatePlyr={setPlyr} plyrState={plyr} />
-        <Square row="2" col="2" updatePlyr={setPlyr} plyrState={plyr} />
+        <Square row="2" col="0" player={p1} />
+        <Square row="2" col="1" player={p1} />
+        <Square row="2" col="2" player={p1} />
       </div>
     </>
   );
