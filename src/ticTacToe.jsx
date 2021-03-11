@@ -1,32 +1,20 @@
 import React, { useState } from 'react';
 import './ticTacToe.css';
 
-function updatePlayerState(row, col, player) {
-  const plyrState = {
-    ownedRows: player.state.ownedRows,
-    ownedCols: player.state.ownedCols,
-  };
-  plyrState.ownedRows[row] = true;
-  plyrState.ownedCols[col] = true;
-  console.log(`player state:
-    ownedRows: ${plyrState.ownedRows}, ownedCols: ${plyrState.ownedCols}`);
-  player.useStateFn(plyrState);
-}
-
 const Square = (ps) => {
   const [xo, setXo] = useState({ mark: '', filled: false });
 
   const handleClick = () => {
     console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
       previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    updatePlayerState(ps.row, ps.col, ps.player);
+    ps.player.addSquare(ps.row, ps.col);
     setXo({ mark: ps.player.mark, filled: true });
   };
 
   const handleKeyDown = () => {
     console.log(`key pressed on row:${ps.row}, col:${ps.col}, 
       previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    updatePlayerState(ps.row, ps.col, ps.player);
+    ps.player.addSquare(ps.row, ps.col);
     setXo({ mark: ps.player.mark, filled: true });
   };
 
@@ -48,6 +36,18 @@ class Player {
     this.mark = mark;
     this.state = state;
     this.useStateFn = useStateFn;
+  }
+
+  addSquare(row, col) {
+    const plyrState = {
+      ownedRows: this.state.ownedRows,
+      ownedCols: this.state.ownedCols,
+    };
+    plyrState.ownedRows[row] = true;
+    plyrState.ownedCols[col] = true;
+    console.log(`player state:
+      ownedRows: ${plyrState.ownedRows}, ownedCols: ${plyrState.ownedCols}`);
+    this.useStateFn(plyrState);
   }
 }
 
