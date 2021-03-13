@@ -7,7 +7,9 @@ const Square = (ps) => {
   const handleClick = () => {
     console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
       previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    ps.player.addSquare(ps.row, ps.col);
+    if (xo.filled === false) {
+      ps.player.addSquare(ps.row, ps.col);
+    }
     setXo({ mark: ps.player.mark, filled: true });
   };
 
