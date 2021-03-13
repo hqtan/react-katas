@@ -7,7 +7,9 @@ const Square = (ps) => {
   const handleClick = () => {
     console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
       previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    ps.player.addSquare(ps.row, ps.col);
+    if (xo.filled === false) {
+      ps.player.addSquare(ps.row, ps.col);
+    }
     setXo({ mark: ps.player.mark, filled: true });
   };
 
@@ -39,23 +41,18 @@ class Player {
   }
 
   addSquare(row, col) {
-    const plyrState = {
-      ownedRows: this.state.ownedRows,
-      ownedCols: this.state.ownedCols,
-    };
-    plyrState.ownedRows[row] = true;
-    plyrState.ownedCols[col] = true;
-    console.log(`player state:
-      ownedRows: ${plyrState.ownedRows}, ownedCols: ${plyrState.ownedCols}`);
+    const plyrState = this.state.concat([[row, col]]);
+    let str = '';
+    plyrState.forEach((element) => {
+      str = `${str} [ ${element} ]`;
+    });
+    console.log(`player state: ${str}`);
     this.useStateFn(plyrState);
   }
 }
 
 const TicTacToe = () => {
-  const [plyr, setPlyr] = useState({
-    ownedRows: Array(3).fill(false),
-    ownedCols: Array(3).fill(false),
-  });
+  const [plyr, setPlyr] = useState([]);
 
   const p1 = new Player('X', plyr, setPlyr);
 
