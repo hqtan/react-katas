@@ -6,10 +6,11 @@ const Square = (ps) => {
 
   const handleClick = () => {
     console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
-      previous state: mark: ${xo.mark}, filled:${xo.filled}`);
+      previous state of square: mark: ${xo.mark}, filled:${xo.filled}`);
     if (xo.filled === false) {
       ps.player.addSquare(ps.row, ps.col);
     }
+    ps.player.has3SquaresInARow();
     setXo({ mark: ps.player.mark, filled: true });
   };
 
@@ -38,16 +39,33 @@ class Player {
     this.mark = mark;
     this.state = state;
     this.useStateFn = useStateFn;
+    console.log(`initialised player state : ${this.showPlayerState()}`);
+  }
+
+  showPlayerState() {
+    let str = '[';
+    this.state.forEach((element) => {
+      str = `${str} ${element}`;
+    });
+    return str.concat(' ]');
   }
 
   addSquare(row, col) {
-    const plyrState = this.state.concat([[row, col]]);
-    let str = '';
-    plyrState.forEach((element) => {
-      str = `${str} [ ${element} ]`;
-    });
-    console.log(`player state: ${str}`);
-    this.useStateFn(plyrState);
+    this.state.push([Number(row), Number(col)]);
+    console.log(`player state after addSquare: ${this.showPlayerState()}`);
+    this.useStateFn(this.state);
+  }
+
+  has3SquaresInARow() {
+    const rows = [0, 1, 2];
+    console.log(`number of squares player has marked: ${this.state.length}`);
+    const hasThreeSquaresInRow = (row) => {
+      const result = (this.state.filter((sqr) => sqr[0] === row).length) === 3;
+      console.log(`row ${row} has 3 squares: ${result}`);
+      return result;
+    };
+    const results = rows.map(hasThreeSquaresInRow);
+    results.some((bool) => bool === true);
   }
 }
 
