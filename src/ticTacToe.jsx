@@ -11,6 +11,7 @@ const Square = (ps) => {
       ps.player.addSquare(ps.row, ps.col);
     }
     ps.player.has3SquaresInARow();
+    ps.player.has3SquaresInAColumn();
     setXo({ mark: ps.player.mark, filled: true });
   };
 
@@ -65,6 +66,18 @@ class Player {
       return result;
     };
     const results = rows.map(hasThreeSquaresInRow);
+    results.some((bool) => bool === true);
+  }
+
+  has3SquaresInAColumn() {
+    const cols = [0, 1, 2];
+    console.log(`number of squares player has marked: ${this.state.length}`);
+    const hasThreeSquaresInColumn = (col) => {
+      const result = (this.state.filter((sqr) => sqr[1] === col).length) === 3;
+      console.log(`column ${col} has 3 squares: ${result}`);
+      return result;
+    };
+    const results = cols.map(hasThreeSquaresInColumn);
     results.some((bool) => bool === true);
   }
 }
