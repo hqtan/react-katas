@@ -12,6 +12,7 @@ const Square = (ps) => {
     }
     ps.player.has3SquaresInARow();
     ps.player.has3SquaresInAColumn();
+    ps.player.has3SquaresInADiagonal();
     setXo({ mark: ps.player.mark, filled: true });
   };
 
@@ -79,6 +80,22 @@ class Player {
     };
     const results = cols.map(hasThreeSquaresInColumn);
     results.some((bool) => bool === true);
+  }
+
+  has3SquaresInADiagonal() {
+    const leftDiagonalSquares = [[0, 0], [1, 1], [2, 2]];
+    const rightDiagonalSquares = [[0, 2], [1, 1], [2, 0]];
+    // returns true if Player's state has square given by `squareToCheck`
+    const hasSquare = (squareToCheck) => this.state.some(
+      (sqr) => (sqr[0] === squareToCheck[0]) && (sqr[1] === squareToCheck[1]),
+    );
+    const leftResult = leftDiagonalSquares.every(hasSquare);
+    console.log(`left diagonal has 3 squares: ${leftResult}`);
+
+    const rightResult = rightDiagonalSquares.every(hasSquare);
+    console.log(`right diagonal has 3 squares: ${rightResult}`);
+
+    return leftResult || rightResult;
   }
 }
 
