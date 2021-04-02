@@ -8,17 +8,22 @@ const Square = (ps) => {
     console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
       previous state of square: mark: ${xo.mark}, filled:${xo.filled}`);
 
-    const hasGameEnd = (gamers) => gamers.some((gamer) => gamer.hasWon());
+    const aPlayerHasWon = ps.players.some((gamer) => gamer.hasWon());
+    const isaDraw = ps.turn >= 9;
+    const hasGameEnd = isaDraw || aPlayerHasWon;
 
-    console.log(`has game ended: ${hasGameEnd(ps.players)}`);
+    console.log(`has game ended: ${hasGameEnd}`);
 
-    if (hasGameEnd(ps.players)) {
+    if (hasGameEnd) {
       setXo({ mark: xo.mark, filled: xo.filled });
     } else if (xo.filled === false) {
       const player = ps.nextPlayer(ps.players);
       player.addSquare(ps.row, ps.col);
       setXo({ mark: player.mark, filled: true });
       if (player.hasWon()) ps.updateMsg(`Player ${player.mark} Wins`);
+
+      console.log(`Turn ${ps.turn}; is a Draw: ${(ps.turn >= 8) && !player.hasWon()}`);
+      if ((ps.turn >= 8) && !player.hasWon()) ps.updateMsg('It\'s a Draw');
     }
   };
 
@@ -124,7 +129,7 @@ const TicTacToe = () => {
   const p2 = new Player('O', plyr2, setPlyr2);
 
   const gamers = [p1, p2];
-  const [gameMsg, setGameMsg] = useState(`Player ${gamers[(turnNum % gamers.length)].mark}'s turn`);
+  const [gameMsg, setGameMsg] = useState(`Turn ${turnNum}. Player ${gamers[(turnNum % gamers.length)].mark}'s turn`);
 
   // console.log('I am still alive.');
 
@@ -135,7 +140,7 @@ const TicTacToe = () => {
     const nxPlayer = nextTurnNum % numPlayers;
     setTurnNum(nextTurnNum);
     console.log(`current player: ${plyrs[currentPlayer].mark}, next player: ${plyrs[nxPlayer].mark}`);
-    setGameMsg(`Player ${plyrs[nxPlayer].mark}'s turn`);
+    setGameMsg(`Turn ${nextTurnNum}. Player ${plyrs[nxPlayer].mark}'s turn`);
 
     return plyrs[currentPlayer];
   };
@@ -144,21 +149,21 @@ const TicTacToe = () => {
     <>
       {/* top */}
       <div className="row">
-        <Square row="0" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
-        <Square row="0" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
-        <Square row="0" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
+        <Square row="0" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="0" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="0" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
       </div>
       {/* middle */}
       <div className="row">
-        <Square row="1" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
-        <Square row="1" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
-        <Square row="1" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
+        <Square row="1" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="1" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="1" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
       </div>
       {/* bottom */}
       <div className="row">
-        <Square row="2" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
-        <Square row="2" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
-        <Square row="2" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} />
+        <Square row="2" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="2" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="2" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
       </div>
       <div className="row">
         <GameStateMessage msg={gameMsg} />
