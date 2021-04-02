@@ -14,12 +14,9 @@ const Square = (ps) => {
 
     if (hasGameEnd(ps.players)) {
       setXo({ mark: xo.mark, filled: xo.filled });
-    } else {
+    } else if (xo.filled === false) {
       const player = ps.nextPlayer(ps.players);
-
-      if (xo.filled === false) {
-        player.addSquare(ps.row, ps.col);
-      }
+      player.addSquare(ps.row, ps.col);
       setXo({ mark: player.mark, filled: true });
       if (player.hasWon()) ps.updateMsg(`Player ${player.mark} Wins`);
     }
