@@ -1,39 +1,37 @@
 import React, { useState } from 'react';
 import './ticTacToe.css';
 import Player from './player';
+import GameOperations from './gameOperations';
 
 const Square = (ps) => {
   const [xo, setXo] = useState({ mark: '', filled: false });
 
-  const handleClick = () => {
+  const handleEvent = () => {
     console.log(`clicked square on row:${ps.row}, col:${ps.col}, 
       previous state of square: mark: ${xo.mark}, filled:${xo.filled}`);
 
-    const aPlayerHasWon = ps.players.some((gamer) => gamer.hasWon());
-    const isaDraw = ps.turn >= 9;
-    const hasGameEnd = isaDraw || aPlayerHasWon;
+    const nextPlayer = (p) => ps.gameOps.getNextGamer(p);
+    const hasGameEnd = ps.gameOps.hasGameEnd(ps.players);
+    const { turn } = ps.gameOps;
+    const updateMsg = ps.gameOps.updateGameMsg;
 
     console.log(`has game ended: ${hasGameEnd}`);
 
     if (hasGameEnd) {
       setXo({ mark: xo.mark, filled: xo.filled });
     } else if (xo.filled === false) {
-      const player = ps.nextPlayer(ps.players);
+      const player = nextPlayer(ps.players);
       player.addSquare(ps.row, ps.col);
       setXo({ mark: player.mark, filled: true });
-      if (player.hasWon()) ps.updateMsg(`Player ${player.mark} Wins`);
+      if (player.hasWon()) updateMsg(`Player ${player.mark} Wins`);
 
-      console.log(`Turn ${ps.turn}; is a Draw: ${(ps.turn >= 8) && !player.hasWon()}`);
-      if ((ps.turn >= 8) && !player.hasWon()) ps.updateMsg('It\'s a Draw');
+      console.log(`Turn ${turn}; is a Draw: ${(turn >= 8) && !player.hasWon()}`);
+      if ((turn >= 8) && !player.hasWon()) updateMsg('It\'s a Draw');
     }
   };
 
-  const handleKeyDown = () => {
-    console.log(`key pressed on row:${ps.row}, col:${ps.col}, 
-      previous state: mark: ${xo.mark}, filled:${xo.filled}`);
-    ps.player.addSquare(ps.row, ps.col);
-    setXo({ mark: ps.player.mark, filled: true });
-  };
+  const handleClick = () => handleEvent();
+  const handleKeyDown = () => handleEvent();
 
   return (
     <div
@@ -61,39 +59,27 @@ const TicTacToe = () => {
   const gamers = [p1, p2];
   const [gameMsg, setGameMsg] = useState(`Turn ${turnNum}. Player ${gamers[(turnNum % gamers.length)].mark}'s turn`);
 
-  // console.log('I am still alive.');
-
-  const nextGamer = (plyrs) => {
-    const numPlayers = plyrs.length;
-    const currentPlayer = turnNum % numPlayers;
-    const nextTurnNum = turnNum + 1;
-    const nxPlayer = nextTurnNum % numPlayers;
-    setTurnNum(nextTurnNum);
-    console.log(`current player: ${plyrs[currentPlayer].mark}, next player: ${plyrs[nxPlayer].mark}`);
-    setGameMsg(`Turn ${nextTurnNum}. Player ${plyrs[nxPlayer].mark}'s turn`);
-
-    return plyrs[currentPlayer];
-  };
+  const GameOps = new GameOperations(turnNum, setTurnNum, setGameMsg);
 
   return (
     <>
       {/* top */}
       <div className="row">
-        <Square row="0" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
-        <Square row="0" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
-        <Square row="0" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="0" col="0" players={gamers} gameOps={GameOps} />
+        <Square row="0" col="1" players={gamers} gameOps={GameOps} />
+        <Square row="0" col="2" players={gamers} gameOps={GameOps} />
       </div>
       {/* middle */}
       <div className="row">
-        <Square row="1" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
-        <Square row="1" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
-        <Square row="1" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="1" col="0" players={gamers} gameOps={GameOps} />
+        <Square row="1" col="1" players={gamers} gameOps={GameOps} />
+        <Square row="1" col="2" players={gamers} gameOps={GameOps} />
       </div>
       {/* bottom */}
       <div className="row">
-        <Square row="2" col="0" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
-        <Square row="2" col="1" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
-        <Square row="2" col="2" players={gamers} updateMsg={setGameMsg} nextPlayer={nextGamer} turn={turnNum} />
+        <Square row="2" col="0" players={gamers} gameOps={GameOps} />
+        <Square row="2" col="1" players={gamers} gameOps={GameOps} />
+        <Square row="2" col="2" players={gamers} gameOps={GameOps} />
       </div>
       <div className="row">
         <GameStateMessage msg={gameMsg} />
